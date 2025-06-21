@@ -23,3 +23,34 @@ function mimicServerCall(url="http://mimicServer.example.com", config={}) {
     }, 300);
   });
 }
+const likeButtons = document.querySelectorAll(".like-glyph");
+
+// Get modal and message element
+const errorModal = document.getElementById("modal");
+const modalMessage = document.getElementById("modal-message");
+
+// Listen for heart clicks
+likeButtons.forEach((heart) => {
+  heart.addEventListener("click", () => {
+    mimicServerCall()
+      .then(() => {
+        if (heart.textContent === "♡") {
+          heart.textContent = "♥";
+          heart.classList.add("activated-heart");
+        } else {
+          heart.textContent = "♡";
+          heart.classList.remove("activated-heart");
+        }
+      })
+      .catch((error) => {
+        // Show error modal
+        modalMessage.textContent = error;
+        errorModal.classList.remove("hidden");
+
+        // Hide modal after 3 seconds
+        setTimeout(() => {
+          errorModal.classList.add("hidden");
+        }, 3000);
+      });
+  });
+});
